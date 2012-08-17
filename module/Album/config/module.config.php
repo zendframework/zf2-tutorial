@@ -11,8 +11,9 @@ return array(
             'album' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/album[/:action][/:id]',
+                    'route'    => '[/:lang]/album[/:action][/:id]',
                     'constraints' => array(
+                        'lang'   => '[a-z]{2}(-[A-Z]{2}){0,1}',
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',
                     ),

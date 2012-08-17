@@ -31,6 +31,17 @@
             <span class="icon-bar"></span>
           </a>
           <a class="brand" href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Skeleton Application') ?></a>
+          
+          <div class="dropdown" style="float:right">
+              <? echo $this->partial('layout/languages.phtml', array(
+                    'lang' => array(
+                        'English'  => 'en-US',
+                        'Français' => 'fr-FR',
+                        'Deutsch'  => 'de-DE'
+                    ),
+                    'selected' => $this->lang
+              )); ?>
+          </div>  
           <div class="nav-collapse">
             <ul class="nav">
               <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>

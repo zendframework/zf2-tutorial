@@ -1,15 +1,14 @@
 <?php 
-$title = 'My albums';
+$title = $this->translate('My albums');
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 <p><a href="<?php echo $this->url('album', array( 
-        'action'=>'add'));?>">Add new album</a></p>
-
+        'action'=>'add'));?>"><?php echo $this->translate('Add new album'); ?></a></p>
 <table class="table">
 <tr>
-    <th>Title</th>
-    <th>Artist</th>
+    <th><?php echo $this->translate('Title'); ?></th>
+    <th><?php echo $this->translate('Artist'); ?></th>
     <th>&nbsp;</th>
 </tr>
 <?php foreach($albums as $album) : ?>
@@ -18,9 +17,9 @@ $this->headTitle($title);
     <td><?php echo $this->escapeHtml($album->artist);?></td>
     <td>
         <a href="<?php echo $this->url('album',
-            array('action'=>'edit', 'id' => $album->id));?>">Edit</a>
+            array('action'=>'edit', 'id' => $album->id));?>"><?php echo $this->translate('Edit'); ?></a>
         <a href="<?php echo $this->url('album',
-            array('action'=>'delete', 'id' => $album->id));?>">Delete</a>
+            array('action'=>'delete', 'id' => $album->id));?>"><?php echo $this->translate('Delete'); ?></a>
     </td>
 </tr>
 <?php endforeach; ?>
