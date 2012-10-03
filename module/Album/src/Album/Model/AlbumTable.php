@@ -2,33 +2,27 @@
 
 namespace Album\Model;
 
-use Zend\Db\TableGateway\AbstractTableGateway;
-use Zend\Db\Adapter\Adapter;
-use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\TableGateway\TableGateway;
 
-class AlbumTable extends AbstractTableGateway
+class AlbumTable
 {
-    protected $table = 'album';
+    protected $tableGateway;
 
-    public function __construct(Adapter $adapter)
+    public function __construct(TableGateway $tableGateway)
     {
-        $this->adapter = $adapter;
-        $this->resultSetPrototype = new ResultSet();
-        $this->resultSetPrototype->setArrayObjectPrototype(new Album());
-
-        $this->initialize();
+        $this->tableGateway = $tableGateway;
     }
 
     public function fetchAll()
     {
-        $resultSet = $this->select();
+        $resultSet = $this->tableGateway->select();
         return $resultSet;
     }
 
     public function getAlbum($id)
     {
         $id  = (int) $id;
-        $rowset = $this->select(array('id' => $id));
+        $rowset = $this->tableGateway->select(array('id' => $id));
         $row = $rowset->current();
         if (!$row) {
             throw new \Exception("Could not find row $id");
@@ -45,10 +39,10 @@ class AlbumTable extends AbstractTableGateway
 
         $id = (int)$album->id;
         if ($id == 0) {
-            $this->insert($data);
+            $this->tableGateway->insert($data);
         } else {
             if ($this->getAlbum($id)) {
-                $this->update($data, array('id' => $id));
+                $this->tableGateway->update($data, array('id' => $id));
             } else {
                 throw new \Exception('Form id does not exist');
             }
@@ -57,7 +51,7 @@ class AlbumTable extends AbstractTableGateway
 
     public function deleteAlbum($id)
     {
-        $this->delete(array('id' => $id));
+        $this->tableGateway->delete(array('id' => $id));
     }
 
 }
