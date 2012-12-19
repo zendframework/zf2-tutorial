@@ -21,13 +21,14 @@ class AlbumController extends AbstractActionController
     public function addAction()
     {
         $form = new AlbumForm();
-        $form->get('submit')->setAttribute('value', 'Add');
+        $form->get('submit')->setValue('Add');
 
         $request = $this->getRequest();
         if ($request->isPost()) {
             $album = new Album();
             $form->setInputFilter($album->getInputFilter());
             $form->setData($request->getPost());
+
             if ($form->isValid()) {
                 $album->exchangeArray($form->getData());
                 $this->getAlbumTable()->saveAlbum($album);
@@ -36,27 +37,30 @@ class AlbumController extends AbstractActionController
                 return $this->redirect()->toRoute('album');
             }
         }
-
         return array('form' => $form);
     }
 
     public function editAction()
     {
-        $id = (int)$this->params('id');
+        $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
-            return $this->redirect()->toRoute('album', array('action'=>'add'));
+            return $this->redirect()->toRoute('album', array(
+                'action' => 'add'
+            ));
         }
         $album = $this->getAlbumTable()->getAlbum($id);
 
-        $form = new AlbumForm();
+        $form  = new AlbumForm();
         $form->bind($album);
         $form->get('submit')->setAttribute('value', 'Edit');
 
         $request = $this->getRequest();
         if ($request->isPost()) {
+            $form->setInputFilter($album->getInputFilter());
             $form->setData($request->getPost());
+
             if ($form->isValid()) {
-                $this->getAlbumTable()->saveAlbum($album);
+                $this->getAlbumTable()->saveAlbum($form->getData());
 
                 // Redirect to list of albums
                 return $this->redirect()->toRoute('album');
@@ -71,16 +75,17 @@ class AlbumController extends AbstractActionController
 
     public function deleteAction()
     {
-        $id = (int)$this->params('id');
+        $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
             return $this->redirect()->toRoute('album');
         }
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $del = $request->getPost()->get('del', 'No');
+            $del = $request->getPost('del', 'No');
+
             if ($del == 'Yes') {
-                $id = (int)$request->getPost()->get('id');
+                $id = (int) $request->getPost('id');
                 $this->getAlbumTable()->deleteAlbum($id);
             }
 
@@ -89,7 +94,7 @@ class AlbumController extends AbstractActionController
         }
 
         return array(
-            'id' => $id,
+            'id'    => $id,
             'album' => $this->getAlbumTable()->getAlbum($id)
         );
     }
